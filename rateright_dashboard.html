@@ -1,0 +1,224 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.app { display: grid; grid-template-columns: 220px 1fr; min-height: 600px; }
+.sidebar { background: var(--color-background-secondary); border-right: 0.5px solid var(--color-border-tertiary); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 4px; }
+.logo { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: #1D9E75; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: var(--border-radius-md); font-size: 13.5px; color: var(--color-text-secondary); cursor: pointer; transition: background 0.15s; text-decoration: none; }
+.nav-item:hover { background: var(--color-background-primary); color: var(--color-text-primary); }
+.nav-item.active { background: var(--color-background-primary); color: var(--color-text-primary); font-weight: 500; }
+.nav-item i { font-size: 16px; }
+.nav-section { font-size: 11px; color: var(--color-text-tertiary); letter-spacing: 0.05em; text-transform: uppercase; padding: 12px 10px 4px; }
+.main { padding: 1.75rem; overflow-y: auto; }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+.property-switcher { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--color-text-secondary); cursor: pointer; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 7px 12px; background: var(--color-background-primary); }
+.property-switcher strong { color: var(--color-text-primary); font-weight: 500; }
+.date-badge { font-size: 12.5px; color: var(--color-text-secondary); background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 6px 12px; }
+.price-hero { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: start; }
+.hero-label { font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.hero-price { font-size: 52px; font-weight: 500; color: #1D9E75; line-height: 1; }
+.hero-price sup { font-size: 22px; vertical-align: top; margin-top: 10px; display: inline-block; }
+.hero-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 8px; }
+.hero-range { font-size: 13px; color: var(--color-text-tertiary); margin-top: 4px; }
+.hero-actions { display: flex; flex-direction: column; gap: 8px; }
+.btn-primary { background: #1D9E75; color: #fff; border: none; border-radius: var(--border-radius-md); padding: 9px 18px; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+.btn-ghost { background: transparent; color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 9px 18px; font-size: 13.5px; cursor: pointer; }
+.breakdown { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem 1.25rem; margin-top: 1rem; }
+.breakdown-title { font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+.breakdown-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-label { flex: 1; color: var(--color-text-primary); }
+.breakdown-reason { color: var(--color-text-secondary); font-size: 12px; }
+.breakdown-impact { font-size: 13px; font-weight: 500; min-width: 48px; text-align: right; }
+.impact-pos { color: #1D9E75; }
+.impact-neg { color: #D85A30; }
+.impact-base { color: var(--color-text-secondary); }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.stat-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+.stat-label { font-size: 11.5px; color: var(--color-text-secondary); margin-bottom: 6px; }
+.stat-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.stat-unit { font-size: 13px; color: var(--color-text-secondary); margin-top: 3px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.panel { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+.panel-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+.panel-title i { font-size: 16px; color: var(--color-text-secondary); }
+.event-row { display: flex; align-items: start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.event-row:last-child { border-bottom: none; }
+.event-dot { width: 8px; height: 8px; border-radius: 50%; background: #EF9F27; margin-top: 5px; flex-shrink: 0; }
+.event-dot.big { background: #D85A30; }
+.event-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.event-meta { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.event-badge { font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #FAEEDA; color: #854F0B; }
+.event-badge.high { background: #FAECE7; color: #993C1D; }
+.comp-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+.comp-row:last-child { border-bottom: none; }
+.comp-name { flex: 1; color: var(--color-text-primary); }
+.comp-price { font-weight: 500; color: var(--color-text-primary); }
+.comp-diff { font-size: 12px; }
+.comp-diff.higher { color: #1D9E75; }
+.comp-diff.lower { color: #D85A30; }
+.occ-bar { height: 8px; background: var(--color-background-secondary); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+.occ-fill { height: 100%; background: #1D9E75; border-radius: 99px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; padding: 3px 9px; border-radius: 99px; }
+.pill-green { background: #EAF3DE; color: #3B6D11; }
+.review-score { font-size: 32px; font-weight: 500; color: var(--color-text-primary); }
+.review-sub { font-size: 12px; color: var(--color-text-secondary); }
+.stars { color: #EF9F27; font-size: 14px; letter-spacing: 1px; }
+</style>
+
+<h2 class="sr-only">RateRight dashboard — tonight's recommended room rate for Harbour View B&amp;B is €165, based on 80% occupancy, a nearby major event, strong reviews, and competitor pricing.</h2>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="ti ti-home" aria-hidden="true"></i></div>
+      RateRight
+    </div>
+    <a class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a>
+    <a class="nav-item"><i class="ti ti-building" aria-hidden="true"></i> Properties</a>
+    <a class="nav-item"><i class="ti ti-users" aria-hidden="true"></i> Competitors</a>
+    <a class="nav-item"><i class="ti ti-calendar-event" aria-hidden="true"></i> Events</a>
+    <div class="nav-section">Settings</div>
+    <a class="nav-item"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Pricing rules</a>
+    <a class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i> Account</a>
+    <div style="flex: 1;"></div>
+    <div style="font-size: 12px; color: var(--color-text-tertiary); padding: 8px 10px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 12px;">Free plan · <span style="color: #1D9E75; cursor: pointer;">Upgrade</span></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="property-switcher">
+        <i class="ti ti-building" aria-hidden="true" style="font-size: 15px;"></i>
+        <strong>Harbour View B&amp;B</strong>
+        <i class="ti ti-chevron-down" aria-hidden="true" style="font-size: 14px;"></i>
+      </div>
+      <div class="date-badge">
+        <i class="ti ti-calendar" aria-hidden="true" style="font-size: 14px; vertical-align: -2px; margin-right: 5px;"></i>
+        Mon 22 June 2026
+      </div>
+    </div>
+
+    <div class="price-hero">
+      <div>
+        <div class="hero-label">Tonight's recommended rate</div>
+        <div class="hero-price"><sup>€</sup>165</div>
+        <div class="hero-sub">Base rate €100 · <span class="pill pill-green"><i class="ti ti-trending-up" aria-hidden="true" style="font-size:12px;"></i> +65% above base</span></div>
+        <div class="hero-range" style="margin-top: 8px;">Your range: €80 – €200</div>
+        <div class="breakdown">
+          <div class="breakdown-title">Why this price?</div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">Base rate</span>
+            <span class="breakdown-reason"></span>
+            <span class="breakdown-impact impact-base">€100</span>
+          </div>
+          <div class="breakdown-row">
+            <i class="ti ti-users" aria-hidden="true" style="font-size:15px; color: #1D9E75;"></i>
+            <span class="breakdown-label">High occupancy</span>
+            <span class="breakdown-reason">80% booked</span>
+            <span class="breakdown-impact impact-pos">+15%</span>
+          </div>
+          <div class="breakdown-row">
+            <i class="ti ti-microphone-2" aria-hidden="true" style="font-size:15px; color: #D85A30;"></i>
+            <span class="breakdown-label">Major event nearby</span>
+            <span class="breakdown-reason">3km · 50k attendees</span>
+            <span class="breakdown-impact impact-pos">+30%</span>
+          </div>
+          <div class="breakdown-row">
+            <i class="ti ti-star" aria-hidden="true" style="font-size:15px; color: #EF9F27;"></i>
+            <span class="breakdown-label">Excellent reviews</span>
+            <span class="breakdown-reason">9.2 score</span>
+            <span class="breakdown-impact impact-pos">+20%</span>
+          </div>
+          <div class="breakdown-row">
+            <i class="ti ti-building-store" aria-hidden="true" style="font-size:15px; color: #7F77DD;"></i>
+            <span class="breakdown-label">Competitors pricing higher</span>
+            <span class="breakdown-reason">Avg €145</span>
+            <span class="breakdown-impact impact-pos">+10%</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary">Apply this rate</button>
+        <button class="btn-ghost">Adjust manually</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Occupancy tonight</div>
+        <div class="stat-value">80<span style="font-size:16px; font-weight:400; color: var(--color-text-secondary);">%</span></div>
+        <div class="occ-bar"><div class="occ-fill" style="width: 80%;"></div></div>
+        <div class="stat-unit" style="margin-top: 6px;">8 of 10 rooms booked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Est. revenue tonight</div>
+        <div class="stat-value">€1,320</div>
+        <div class="stat-unit">8 rooms × €165</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Competitor average</div>
+        <div class="stat-value">€145</div>
+        <div class="stat-unit">3 properties tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Review score</div>
+        <div class="stat-value">9.2</div>
+        <div class="stars">★★★★★</div>
+        <div class="stat-unit">Booking.com</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title"><i class="ti ti-calendar-event" aria-hidden="true"></i> Events nearby</div>
+        <div class="event-row">
+          <div class="event-dot big"></div>
+          <div>
+            <div class="event-name">Coldplay — Music of the Spheres</div>
+            <div class="event-meta">3.2km · 52,000 estimated · Tonight <span class="event-badge high">Major</span></div>
+          </div>
+        </div>
+        <div class="event-row">
+          <div class="event-dot"></div>
+          <div>
+            <div class="event-name">City Food & Drink Festival</div>
+            <div class="event-meta">1.1km · 8,000 estimated · Fri–Sun <span class="event-badge">Festival</span></div>
+          </div>
+        </div>
+        <div class="event-row">
+          <div class="event-dot" style="background: #85B7EB;"></div>
+          <div>
+            <div class="event-name">Regional Rugby Championship</div>
+            <div class="event-meta">5.8km · 12,000 estimated · Sat <span class="event-badge" style="background: #E6F1FB; color: #185FA5;">Sport</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><i class="ti ti-building-store" aria-hidden="true"></i> Competitor rates</div>
+        <div class="comp-row">
+          <span class="comp-name">Harbour Lodge</span>
+          <span class="comp-price">€140</span>
+          <span class="comp-diff lower">You'd be above</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-name">Riverside Inn</span>
+          <span class="comp-price">€150</span>
+          <span class="comp-diff lower">You'd be above</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-name">City Centre B&amp;B</span>
+          <span class="comp-price">€145</span>
+          <span class="comp-diff lower">You'd be above</span>
+        </div>
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: var(--color-text-secondary);">Average</span>
+          <span style="font-size: 15px; font-weight: 500; color: var(--color-text-primary);">€145</span>
+        </div>
+        <div style="margin-top: 8px; font-size: 12px; color: var(--color-text-secondary);">Your rate of €165 is 14% above average — justified by your review score and event demand.</div>
+      </div>
+    </div>
+  </div>
+</div>
